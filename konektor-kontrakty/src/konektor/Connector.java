@@ -17,6 +17,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
@@ -139,6 +140,7 @@ class Connector {
             parser.parse(httpCon.getInputStream(), teeHandler, metadata, parseContext);
             plainTextHTML = textHandler.toString();
 
+            System.out.println(linkHandler.getLinks());
             checkUrls(linkHandler.getLinks());
             ingestPage(urlPage, plainTextHTML);
             System.gc();
@@ -234,15 +236,24 @@ class Connector {
         while (allUrls.size() > 0) {
             System.out.println("URLs to check " + this.allUrls.size());
             System.out.println("URLs checked  " + this.usedUrls.size());
+            Boolean breaknout = false;
             for (String used : usedUrls) {
                 if (allUrls.isEmpty()) {
+                    breaknout = true;
                     break;
                 }
                 if (used.equals(allUrls.get(0))) {
                     allUrls.remove(0);
+                    breaknout = true;
+                    break;
                 }
             }
             if (allUrls.isEmpty()) {
+                breaknout = true;
+                break;
+            }
+            
+            if (breaknout){
                 break;
             }
             System.out.println("Downloading " + allUrls.get(0));
