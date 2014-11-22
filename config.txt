@@ -1,0 +1,13 @@
+[license]
+licensekey:gnutnrl185
+
+[server]
+contains:alza.cz
+//ip:192.168.0.107
+ip:localhost
+port:9200
+index:www
+type:idnes3
+
+[task]
+url@http://www.alza.cz/

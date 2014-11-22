@@ -85,22 +85,24 @@ class Connector {
                 if (line.toLowerCase().contains("[server]")) {
                     while (!line.toLowerCase().contains("[task]")) {
                         line = br.readLine();
-                        pole = line.split(":");
-                        if (pole[0].equals("ip")) {
-                            //ip:192.168.0.0
-                            this.ipES = pole[1];
-                        }
-                        if (pole[0].equals("port")) {
-                            this.portES = pole[1];
-                        }
-                        if (pole[0].equals("index")) {
-                            this.indexES = pole[1];
-                        }
-                        if (pole[0].equals("type")) {
-                            this.typeES = pole[1];
-                        }
-                        if (pole[0].equals("contains")) {
-                            this.startsWith.add(pole[1]);
+                        if (!line.startsWith("//")){ //možnost komentovat v config.txt - začátek řádku je //
+                            pole = line.split(":");
+                            if (pole[0].equals("ip")) {
+                                //ip:192.168.0.0
+                                this.ipES = pole[1];
+                            }
+                            if (pole[0].equals("port")) {
+                                this.portES = pole[1];
+                            }
+                            if (pole[0].equals("index")) {
+                                this.indexES = pole[1];
+                            }
+                            if (pole[0].equals("type")) {
+                                this.typeES = pole[1];
+                            }
+                            if (pole[0].equals("contains")) {
+                                this.startsWith.add(pole[1]);
+                            }
                         }
                     }
                 }
@@ -198,7 +200,7 @@ class Connector {
 
     private void ingestPage(String urlPage, String bodyPage) {
 
-        String message = "{ \"body\" : \"" + bodyPage.replaceAll("\n", " ").replaceAll("\t", " ").replaceAll("  ", "") + "\", \"url\" : \""
+        String message = "{ \"body\" : \"" + bodyPage.replaceAll("\n", " ").replaceAll("\t", " ").replaceAll("^ +| +$|( )+", "$1") + "\", \"url\" : \"" //úprava replacu multi space
                 + urlPage + "\", \"date\" : \"" + new Date() + "\"}";
         //System.out.println(message);
         try {
